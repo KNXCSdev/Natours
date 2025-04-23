@@ -8,8 +8,13 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 //1) MIDDLEWARES SECTION
-app.use(morgan('dev'));
+/* eslint-disable no-undef */
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json()); //MIDDLEWARE
+app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
   console.log('Hello form the middleware 😃');
