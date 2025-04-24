@@ -1,82 +1,108 @@
-const fs = require('fs');
+const Tour = require('./../models/tourModel');
 
 /* eslint-disable no-undef */
-const toursData = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
-);
+// const toursData = JSON.parse(
+//   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
+// );
 
-exports.checkID = (req, res, next, val) => {
-  if (val * 1 > toursData.length)
-    return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
+// exports.checkBody = (req, res, next) => {
+//   if (!req.body.name || !req.body.price) {
+//     return res
+//       .status(400)
+//       .json({ status: 'fail', message: 'Missing name or price' }); //400 BAD REQUEST
+//   }
 
-  next();
-};
+//   next();
+// };
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res
-      .status(400)
-      .json({ status: 'fail', message: 'Missing name or price' }); //400 BAD REQUEST
+exports.getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find({});
+
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: tours.length,
+      data: tours,
+    });
+  } catch {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Tours were not found!',
+    });
   }
-
-  next();
 };
 
-exports.getAllTours = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: toursData.length,
-    data: { tours: toursData },
-  });
+exports.getTour = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const tour = await Tour.findById(id);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch {
+    res.status(404).json({
+      status: 'fail',
+      message: 'Tour with the specific id was not found!',
+    });
+  }
 };
 
-exports.getTour = (req, res) => {
-  const id = req.params.id * 1;
-
-  const tour = toursData.find((el) => el.id === id);
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
+exports.createTour = async (req, res) => {
+  try {
+    const newTour = await Tour.create(req.body);
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent!',
+    });
+  }
 };
 
-exports.createTour = (req, res) => {
-  const newId = toursData[toursData.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-  toursData.push(newTour); //PUSH BECAUSE WE NEED TO PASS IT TO WRITE FILE
-
-  //Now we are overwriting the file so we can have a fresh data /NOTE
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(toursData),
-    (err) => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          tour: newTour,
-        },
-      }); //201 means CREATED
-    },
-  );
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    }); //OK WHEN WE UPDATE
+  } catch {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent!',
+    });
+  }
 };
 
-exports.updateTour = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: 'Updated tour here...',
-    },
-  }); //OK WHEN WE UPDATE
-};
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
 
-exports.deleteTour = (req, res) => {
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  }); //204 NO CONTENT WHEN WE DELETE
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    }); //204 NO CONTENT WHEN WE DELETE
+  } catch {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Tour with the specific id was not found!',
+    });
+  }
 };
