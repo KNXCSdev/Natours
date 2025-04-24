@@ -1,6 +1,5 @@
 const Tour = require('./../models/tourModel');
 
-/* eslint-disable no-undef */
 // const toursData = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 // );
@@ -25,10 +24,10 @@ exports.getAllTours = async (req, res) => {
       results: tours.length,
       data: tours,
     });
-  } catch {
+  } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Tours were not found!',
+      message: err,
     });
   }
 };
@@ -45,10 +44,10 @@ exports.getTour = async (req, res) => {
         tour,
       },
     });
-  } catch {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: 'Tour with the specific id was not found!',
+      message: err,
     });
   }
 };
@@ -62,10 +61,10 @@ exports.createTour = async (req, res) => {
         tour: newTour,
       },
     });
-  } catch {
+  } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Invalid data sent!',
+      message: err,
     });
   }
 };
@@ -83,10 +82,10 @@ exports.updateTour = async (req, res) => {
         tour,
       },
     }); //OK WHEN WE UPDATE
-  } catch {
+  } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Invalid data sent!',
+      message: err,
     });
   }
 };
@@ -99,10 +98,10 @@ exports.deleteTour = async (req, res) => {
       status: 'success',
       data: null,
     }); //204 NO CONTENT WHEN WE DELETE
-  } catch {
+  } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Tour with the specific id was not found!',
+      message: err,
     });
   }
 };
