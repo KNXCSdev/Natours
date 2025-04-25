@@ -6,6 +6,12 @@ const router = express.Router();
 // router.param('id', tourController.checkID);
 
 router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours);
+
+router.route('/tour-stats').get(tourController.getTourStats);
+
+router
   .route('/')
   .get(tourController.getAllTours)
   .post(tourController.createTour); //CHAINING METHODS //(tourController.checkBody <--- Middleware, tourController.createTour) TO CALL THE MIDDLEWARE ONLY IN ONE FUNCTION
