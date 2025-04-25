@@ -7,7 +7,13 @@ const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
+const qs = require('qs');
+
 //1) MIDDLEWARES SECTION
+
+//SETTING THE MONGOOSE QUERY PARSER TO CONVERT OBJECT
+app.set('query parser', (str) => qs.parse(str));
+
 /* eslint-disable no-undef */
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
