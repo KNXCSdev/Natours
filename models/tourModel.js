@@ -9,9 +9,14 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
-      maxLenght: [40, 'A tour name must have less or equal than 40 characters'],
-      minLenght: [10, 'A tour name must have more or equal than 10 characters'],
-      validate: [validator.isAlpha, 'Tour name must only contain characters'],
+      maxLength: [40, 'A tour name must have less or equal than 40 characters'],
+      minLength: [10, 'A tour name must have more or equal than 10 characters'],
+      validate: {
+        validator: function (value) {
+          return validator.isAlpha(value.split(' ').join(''));
+        },
+        message: 'Tour name must only contain characters.',
+      },
     },
     slug: String,
     duration: {
@@ -34,7 +39,7 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
-      max: [1, 'Rating must be below 5.0'],
+      max: [5, 'Rating must be below 5.0'],
     },
     ratingsQuantity: {
       type: Number,
