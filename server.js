@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 /* eslint-disable no-undef */
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION! 💥 SHUTTING DOWN...');
+  console.error(err.message);
   process.exit(1);
 });
 
