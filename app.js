@@ -11,40 +11,64 @@ const app = express();
 
 const qs = require('qs');
 
+const { default: rateLimit } = require('express-rate-limit');
+const { default: helmet } = require('helmet');
+const { xss } = require('express-xss-sanitizer');
+const hpp = require('hpp');
+
 //1) MIDDLEWARES SECTION
+
+app.use(helmet());
 
 //SETTING THE MONGOOSE QUERY PARSER TO CONVERT OBJECT
 app.set('query parser', (str) => qs.parse(str));
 
-/* eslint-disable no-undef */
+/* eslint-disable no-undef */ //DEVELOPMENT LOGGING
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use(express.json()); //MIDDLEWARE
+//BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
+//limit data to 10kb
+app.use(express.json({ limit: '10kb' }));
+
+//DATA SANITIZATION AGAINTS XSS
+app.use(xss());
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'averageQuantity',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  }),
+);
+
+//SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
 
+// TEST MIDDLEWARE
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
 
   next();
 });
 
-// app.get('/', (req, res) => {
-//   res
-//     .status(200)
-//     .json({ message: 'Hello from the server side!', app: 'Natours' });
-// });
+//LIMIT REQUEST FROM SAME API
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  message: 'Too many requests from this IP, please try again in an hour',
+});
 
-// app.post('/', (req, res) => {
-//   res.send('You can post to this endpoint...');
-// });
-
-// app.get('/api/v1/tours', getAllTours);
-// app.post('/api/v1/tours', createTour);
-// app.get('/api/v1/tours/:id', getTour);
-// app.patch('/api/v1/tours/:id', updateTour);
-// app.delete('/api/v1/tours/:id', deleteTour);
+app.use('/api', limiter);
 
 //3) SECTION ROUTES
 
@@ -53,11 +77,6 @@ app.use('/api/v1/users', userRouter);
 
 //IT ONLY EXECUTES WHEN ROUTES DONT MATCH ^
 app.all('/{*any}', (req, res, next) => {
-  // res.status(404).json({
-  //   status: 'fail',
-  //   message: `Can't find ${req.originalUrl} on this server`,
-  // });
-
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404)); // IT IMMEDIATLY PASSES TO ERROR HANDLING MIDDLEWARE BECAUSE NEXT HAS ARGUMENT INSIDE
 });
 
