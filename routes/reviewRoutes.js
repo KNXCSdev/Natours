@@ -2,7 +2,8 @@ const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const authController = require('./../controllers/authController');
 
-const router = express.Router();
+//BY DEFAULT EACH ROUTER ONLY HAS ACCESS TO THEIR SPECIFIC ROUTES IN OORDER TO GET ACCESS WE NEED TO MERGE PARAMETER
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')

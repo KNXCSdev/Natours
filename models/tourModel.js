@@ -111,6 +111,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+//Virtual populate it basically doesnt create new Row in database but only on request
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 //DOCUMENT MIDDLEWARE SO IT RUNS BEFORE .save and .create
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
