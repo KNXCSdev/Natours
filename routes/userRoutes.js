@@ -22,13 +22,12 @@ router
   .route('/deleteMe')
   .delete(authController.protect, userController.deleteMe);
 
-router
-  .route('/')
-  .get(authController.protect, userController.getAllUsers)
-  .post(userController.createUser);
+router.route('/').get(authController.protect, userController.getAllUsers);
+
 router
   .route('/:id')
-  .get(userController.getUser)
-  .delete(userController.deleteUser);
+  .get(authController.protect, userController.getUser)
+  .delete(userController.deleteUser)
+  .patch(userController.update);
 
 module.exports = router;
