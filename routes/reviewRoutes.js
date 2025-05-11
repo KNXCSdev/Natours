@@ -5,12 +5,13 @@ const authController = require('./../controllers/authController');
 //BY DEFAULT EACH ROUTER ONLY HAS ACCESS TO THEIR SPECIFIC ROUTES IN OORDER TO GET ACCESS WE NEED TO MERGE PARAMETER
 const router = express.Router({ mergeParams: true });
 
+router.use(authController.protect);
+
 router
   .route('/')
   .get(reviewController.getAllReviews)
   .post(
-    authController.protect,
-    authController.restrictTo('user', 'admin'),
+    authController.restrictTo('user'),
     reviewController.setTourUserIds,
     reviewController.createReview,
   );
@@ -18,7 +19,13 @@ router
 router
   .route('/:id')
   .get(reviewController.getReview)
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .patch(
+    authController.restrictTo('user', 'admin'),
+    reviewController.updateReview,
+  )
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewController.deleteReview,
+  );
 
 module.exports = router;
