@@ -29,6 +29,10 @@ router
   .get(authController.protect, tourController.getToursWithin);
 
 router
+  .route('/distance/:latlng/unit/:unit')
+  .get(authController.protect, tourController.getDistances);
+
+router
   .route('/')
   .get(tourController.getAllTours)
   .post(
