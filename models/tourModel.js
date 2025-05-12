@@ -166,13 +166,13 @@ tourSchema.post(/^find/, function (docs, next) {
 });
 
 //AGGREGATION MIDDLEWARE IT BASICALLY RUNS BEFORE THE AGGREGATE FUNCTION IN THE TOUR CONTROLLER SO THE FUNCTION DOESNT CALCULATE THE SECRET TOURS NOTE
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
 
-  console.log(this.pipeline());
+//   console.log(this.pipeline());
 
-  next();
-});
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
