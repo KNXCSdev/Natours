@@ -48,6 +48,11 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
+// Prevent duplicate reviews
+// This will create a compound index on the tour and user fields
+// and ensure that the combination of tour and user is unique
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // Static method to calculate average ratings
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
   const stats = await this.aggregate([
