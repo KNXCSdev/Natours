@@ -107,6 +107,10 @@ const tourSchema = new mongoose.Schema(
   { toObject: { virtuals: true } },
 ); //Describe data,diffrent values etc...
 
+//SORTING THE PRICE INDEX IN THE ASC ORDER
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
@@ -159,7 +163,7 @@ tourSchema.post(/^find/, function (docs, next) {
   next();
 });
 
-//AGGREGATION MIDDLEWARE
+//AGGREGATION MIDDLEWARE IT BASICALLY RUNS BEFORE THE AGGREGATE FUNCTION IN THE TOUR CONTROLLER SO THE FUNCTION DOESNT CALCULATE THE SECRET TOURS NOTE
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
 
