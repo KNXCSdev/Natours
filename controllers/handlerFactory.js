@@ -55,9 +55,9 @@ exports.getAll = (Model) =>
       .limitFields()
       .paginate();
 
+    //SetOptions to see the explaination of the query .setOptions({ explain: 'executionStats' })
     const doc = await features.query;
 
-    //SEND RESPONSE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
