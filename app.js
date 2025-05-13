@@ -16,15 +16,22 @@ const { default: rateLimit } = require('express-rate-limit');
 const { default: helmet } = require('helmet');
 const { xss } = require('express-xss-sanitizer');
 const hpp = require('hpp');
+/* eslint-disable no-undef */
 
 //1) MIDDLEWARES SECTION
 
 app.use(helmet());
 
+app.set('view engine', 'pug'); // SET VIEW ENGINE TO PUG
+app.set('views', `${__dirname}/views`); // SET VIEWS DIRECTORY
+
+//SERVING STATIC FILES
+app.use(express.static(`${__dirname}/public`));
+
 //SETTING THE MONGOOSE QUERY PARSER TO CONVERT OBJECT
 app.set('query parser', (str) => qs.parse(str));
 
-/* eslint-disable no-undef */ //DEVELOPMENT LOGGING
+//DEVELOPMENT LOGGING
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
@@ -50,9 +57,6 @@ app.use(
   }),
 );
 
-//SERVING STATIC FILES
-app.use(express.static(`${__dirname}/public`));
-
 // TEST MIDDLEWARE
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -72,6 +76,24 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 //3) SECTION ROUTES
+app.get('/', (req, res) => {
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Jonas',
+  });
+});
+
+app.get('/overview', (req, res) => {
+  res.status(200).render('overview', {
+    title: 'All Tours',
+  });
+});
+
+app.get('/tour', (req, res) => {
+  res.status(200).render('tour', {
+    title: 'The Forest Hiker Tour',
+  });
+});
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
