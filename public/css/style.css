@@ -149,7 +149,7 @@ body {
 .heading-primary span,
 .heading-tertirary span {
   padding: 1rem 1.5rem;
-  line-height: 1;
+  line-height: 1.6;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   background-image: -webkit-gradient(
