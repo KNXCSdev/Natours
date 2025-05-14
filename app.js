@@ -26,6 +26,14 @@ app.use(helmet());
 app.set('view engine', 'pug'); // SET VIEW ENGINE TO PUG
 app.set('views', `${__dirname}/views`); // SET VIEWS DIRECTORY
 
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "script-src 'self' https://unpkg.com/leaflet@1.9.4/dist/leaflet.css https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+  );
+  next();
+});
+
 //SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
 
