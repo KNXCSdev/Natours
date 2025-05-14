@@ -12,14 +12,20 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "main": "app.js",
+  "targets": {
+    "main": false
+  },
   "scripts": {
     "start": "nodemon server.js",
-    "start:prod": "set NODE_ENV=production&& nodemon server.js"
+    "start:prod": "set NODE_ENV=production&& nodemon server.js",
+    "watch:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundle",
+    "build:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundle"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "core-js": "^3.42.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
@@ -32,6 +38,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.10.1",
     "pug": "^3.0.3",
+    "regenerator-runtime": "^0.14.1",
     "slugify": "^1.6.6",
     "validator": "^13.15.0"
   },
@@ -47,6 +54,7 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
     "nodemon": "^3.1.9",
+    "parcel": "^2.15.0",
     "prettier": "^3.5.3"
   }
 }
