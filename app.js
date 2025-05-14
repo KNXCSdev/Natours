@@ -17,6 +17,7 @@ const { default: rateLimit } = require('express-rate-limit');
 const { default: helmet } = require('helmet');
 const { xss } = require('express-xss-sanitizer');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 /* eslint-disable no-undef */
 
 //1) MIDDLEWARES SECTION
@@ -48,6 +49,7 @@ if (process.env.NODE_ENV === 'development') {
 //BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
 //limit data to 10kb
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //DATA SANITIZATION AGAINTS XSS
 app.use(xss());
