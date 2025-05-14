@@ -1,7 +1,7 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import { displayMap } from './mapbox';
-import { login } from './login';
+import { login, logout } from './login';
 import { showAlert } from './alerts';
 
 const mapBox = document.getElementById('map');
@@ -25,6 +25,10 @@ if (loginForm) {
 
     login(email, password);
   });
+}
+
+if (logOutBtn) {
+  logOutBtn.addEventListener('click', logout);
 }
 
 const alertMessage = document.querySelector('body').dataset.alert;

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { showAlert } from './alerts';
 
 export async function login(email, password) {
@@ -28,5 +26,25 @@ export async function login(email, password) {
     }
   } catch (err) {
     showAlert('error', err.message); // <- simpler error handling
+  }
+}
+
+export async function logout() {
+  try {
+    const response = await fetch('/api/v1/users/logout', {
+      method: 'GET',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Logout failed');
+    }
+
+    if (data.status === 'success') {
+      location.reload(true);
+    }
+  } catch (err) {
+    showAlert('error', err.message);
   }
 }

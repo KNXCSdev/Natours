@@ -764,6 +764,7 @@ if (loginForm) loginForm.addEventListener('submit', async (e)=>{
     const password = document.getElementById('password').value;
     (0, _login.login)(email, password);
 });
+if (logOutBtn) logOutBtn.addEventListener('click', (0, _login.logout));
 const alertMessage = document.querySelector('body').dataset.alert;
 if (alertMessage) (0, _alerts.showAlert)('success', alertMessage, 20);
 
@@ -6998,9 +6999,10 @@ exports.export = function(dest, destName, get) {
 };
 
 },{}],"7yHem":[function(require,module,exports,__globalThis) {
-/* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
+parcelHelpers.export(exports, "logout", ()=>logout);
 var _alerts = require("./alerts");
 async function login(email, password) {
     try {
@@ -7027,8 +7029,20 @@ async function login(email, password) {
         (0, _alerts.showAlert)('error', err.message); // <- simpler error handling
     }
 }
+async function logout() {
+    try {
+        const response = await fetch('/api/v1/users/logout', {
+            method: 'GET'
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Logout failed');
+        if (data.status === 'success') location.reload(true);
+    } catch (err) {
+        (0, _alerts.showAlert)('error', err.message);
+    }
+}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts":"6Mcnf"}],"6Mcnf":[function(require,module,exports,__globalThis) {
+},{"./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6Mcnf":[function(require,module,exports,__globalThis) {
 /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "hideAlert", ()=>hideAlert);
