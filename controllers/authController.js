@@ -204,6 +204,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   req.user = freshUser;
+  res.locals.user = freshUser;
   next();
 });
 
@@ -236,6 +237,8 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // THERE IS A LOGGED IN USER
+      // WE ARE BASICALLY ATTACHING THE USER TO THE RESPONSE OBJECT SO THE REST OF THE FUNCTIONS CAN USE IT
+      //RES.LOCALS IS A OBJECT THAT IS PASSED TO THE TEMPLATE ENGINE SO WE CAN USE IT IN THE VIEWS WITHOUT HAVING TO PASS IT EVERY TIME TO RENDER FUCNTION
       res.locals.user = currentUser;
       return next();
     } catch (err) {

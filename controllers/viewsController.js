@@ -1,5 +1,7 @@
 const Review = require('../models/reviewModel');
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
+const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getOverview = catchAsync(async (req, res, next) => {
@@ -21,6 +23,8 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user',
   });
 
+  if (!tour) next(new AppError('The tour with that name doesnt exist'), 404);
+
   res.status(200).render('tour', {
     title: tour.name,
     reviews,
@@ -31,5 +35,12 @@ exports.getTour = catchAsync(async (req, res, next) => {
 exports.getLoginForm = catchAsync(async (req, res, next) => {
   res.status(200).render('login', {
     title: 'Log in to your account',
+  });
+});
+
+//WE DONT NEED TO PASS THE USER INTO THE RENDER FUNCTION BECAUSE WE ARE USING RES.LOCALS AND THAT WILL BE PASSED TO THE TEMPLATE
+exports.getAccount = catchAsync(async (req, res, next) => {
+  res.status(200).render('account', {
+    title: 'Your account',
   });
 });
