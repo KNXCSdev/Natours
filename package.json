@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "crypto-browserify": "^3.12.1",
     "eslint": "^9.25.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^10.1.2",
