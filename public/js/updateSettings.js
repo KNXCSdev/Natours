@@ -9,6 +9,9 @@ export const updateSettings = async (data, type) => {
         : '/api/v1/users/updateMe';
 
     const isFormData = data instanceof FormData;
+    // Check if data is an instance of FormData
+    // If it is, we don't want to set the Content-Type header
+    // because the browser will automatically set it to multipart/form-data
 
     const res = await fetch(url, {
       method: 'PATCH',

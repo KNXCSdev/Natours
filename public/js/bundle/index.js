@@ -772,6 +772,8 @@ if (userDataForm) userDataForm.addEventListener('submit', (e)=>{
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
+    // SENDING THE FORM DATA TO THE UPDATE SETTINGS FUNCTION
+    // THE UPDATE SETTINGS FUNCTION WILL HANDLE THE AJAX REQUEST
     (0, _updateSettings.updateSettings)(form, 'data');
 });
 if (userPasswordForm) userPasswordForm.addEventListener('submit', async (e)=>{
@@ -7094,6 +7096,9 @@ const updateSettings = async (data, type)=>{
     try {
         const url = type === 'password' ? '/api/v1/users/updatePassword' : '/api/v1/users/updateMe';
         const isFormData = data instanceof FormData;
+        // Check if data is an instance of FormData
+        // If it is, we don't want to set the Content-Type header
+        // because the browser will automatically set it to multipart/form-data
         const res = await fetch(url, {
             method: 'PATCH',
             headers: !isFormData ? {
