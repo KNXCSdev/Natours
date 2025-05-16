@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { showAlert } from './alerts';
 
 // type is either 'password' or 'data'
@@ -10,20 +8,25 @@ export const updateSettings = async (data, type) => {
         ? '/api/v1/users/updatePassword'
         : '/api/v1/users/updateMe';
 
+    const isFormData = data instanceof FormData;
+
     const res = await fetch(url, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+      headers: !isFormData
+        ? {
+            'Content-Type': 'application/json',
+          }
+        : undefined,
+
+      body: isFormData ? data : JSON.stringify(data),
     });
 
-    const dataa = await res.json();
+    const responseData = await res.json();
 
-    if (dataa.status === 'success') {
+    if (responseData.status === 'success') {
       showAlert('success', `${type.toUpperCase()} updated successfully!`);
     }
   } catch (err) {
-    showAlert('error', err.response.data.message);
+    showAlert('error', err.message || 'An error occurred');
   }
 };

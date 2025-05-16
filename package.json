@@ -14,7 +14,11 @@
   "author": "",
   "main": "app.js",
   "targets": {
-    "main": false
+    "main": false,
+    "default": {
+      "distDir": "./public/js/bundle",
+      "includeNodeModules": true
+    }
   },
   "scripts": {
     "start": "nodemon server.js",
@@ -23,6 +27,7 @@
     "build:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundle"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.42.0",
@@ -36,14 +41,19 @@
     "mapbox-gl": "^3.12.0",
     "mongoose": "^8.13.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.10.1",
     "pug": "^3.0.3",
     "regenerator-runtime": "^0.14.1",
+    "sharp": "^0.34.1",
     "slugify": "^1.6.6",
     "validator": "^13.15.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "assert": "^2.1.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
     "eslint": "^9.25.1",
     "eslint-config-airbnb": "^19.0.4",
@@ -53,9 +63,16 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react": "^7.37.5",
+    "events": "^3.3.0",
     "globals": "^16.0.0",
+    "https-browserify": "^1.0.0",
     "nodemon": "^3.1.9",
     "parcel": "^2.15.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5"
   }
 }

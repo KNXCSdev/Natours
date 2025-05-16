@@ -766,16 +766,13 @@ if (loginForm) loginForm.addEventListener('submit', async (e)=>{
     (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener('click', (0, _login.logout));
-if (userDataForm) userDataForm.addEventListener('submit', async (e)=>{
+if (userDataForm) userDataForm.addEventListener('submit', (e)=>{
     e.preventDefault();
-    const form = new FormData(userDataForm);
-    const name = form.get('name');
-    const email = form.get('email');
-    const photo = form.get('photo');
-    (0, _updateSettings.updateSettings)({
-        name,
-        email
-    }, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    (0, _updateSettings.updateSettings)(form, 'data');
 });
 if (userPasswordForm) userPasswordForm.addEventListener('submit', async (e)=>{
     e.preventDefault();
@@ -7089,24 +7086,25 @@ const showAlert = (type, msg, time = 7)=>{
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l3cGY":[function(require,module,exports,__globalThis) {
-/* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
 var _alerts = require("./alerts");
 const updateSettings = async (data, type)=>{
     try {
         const url = type === 'password' ? '/api/v1/users/updatePassword' : '/api/v1/users/updateMe';
+        const isFormData = data instanceof FormData;
         const res = await fetch(url, {
             method: 'PATCH',
-            headers: {
+            headers: !isFormData ? {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            } : undefined,
+            body: isFormData ? data : JSON.stringify(data)
         });
-        const dataa = await res.json();
-        if (dataa.status === 'success') (0, _alerts.showAlert)('success', `${type.toUpperCase()} updated successfully!`);
+        const responseData = await res.json();
+        if (responseData.status === 'success') (0, _alerts.showAlert)('success', `${type.toUpperCase()} updated successfully!`);
     } catch (err) {
-        (0, _alerts.showAlert)('error', err.response.data.message);
+        (0, _alerts.showAlert)('error', err.message || 'An error occurred');
     }
 };
 
