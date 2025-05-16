@@ -40,6 +40,9 @@ if (userDataForm) {
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
 
+    // SENDING THE FORM DATA TO THE UPDATE SETTINGS FUNCTION
+    // THE UPDATE SETTINGS FUNCTION WILL HANDLE THE AJAX REQUEST
+
     updateSettings(form, 'data');
   });
 }
