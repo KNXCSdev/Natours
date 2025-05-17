@@ -25,16 +25,45 @@ const cookieParser = require('cookie-parser');
 
 app.use(helmet());
 
+// Further HELMET configuration for Security Policy (CSP)
+const scriptSrcUrls = [
+  'https://unpkg.com/',
+  'https://tile.openstreetmap.org',
+  'https://js.stripe.com',
+];
+const styleSrcUrls = [
+  'https://unpkg.com/',
+  'https://tile.openstreetmap.org',
+  'https://fonts.googleapis.com/',
+];
+const connectSrcUrls = [
+  'https://unpkg.com',
+  'https://tile.openstreetmap.org',
+  'ws://127.0.0.1:1234',
+];
+const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+
+//set security http headers
+// 1) GLOBAL MIDDLEWARES
+// Set security HTTP headers
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"], // ✅ avoids fallback to 'none'
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'self'", 'https://js.stripe.com', ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", 'blob:'],
+      objectSrc: [],
+      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+      fontSrc: ["'self'", ...fontSrcUrls],
+      frameSrc: ["'self'", 'https://js.stripe.com'], // ✅ allow Stripe iframe
+    },
+  }),
+);
+
 app.set('view engine', 'pug'); // SET VIEW ENGINE TO PUG
 app.set('views', `${__dirname}/views`); // SET VIEWS DIRECTORY
-
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "script-src 'self' https://unpkg.com/leaflet@1.9.4/dist/leaflet.css https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
-  );
-  next();
-});
 
 //SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
