@@ -4,6 +4,7 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { showAlert } from './alerts';
 import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
 
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
@@ -72,3 +73,10 @@ if (userPasswordForm) {
 
 const alertMessage = document.querySelector('body').dataset.alert;
 if (alertMessage) showAlert('success', alertMessage, 20);
+
+if (bookBtn)
+  bookBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
