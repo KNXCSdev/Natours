@@ -1,6 +1,7 @@
 const express = require('express');
 const viewsController = require('../controllers/viewsController');
 const authController = require('../controllers/authController');
+const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
@@ -13,12 +14,18 @@ router.post(
   viewsController.updateUserData,
 );
 
-//CALLING THIS IS FOR ROUTES THAT CAN BE ACCESSED WITHOUT LOGGING IN
+//CALLING isLOGGEDIN  IS FOR ROUTES THAT CAN BE ACCESSED WITHOUT LOGGING IN
 //SO BASICALLY THIS WILL CHECK IF THE PAGE NEEDS TO RENDER THE USER PHOTO IF IS LOGGED IN
-router.use(authController.isLoggedIn);
 
-router.get('/', viewsController.getOverview);
-router.get('/tour/:slug', viewsController.getTour);
-router.get('/login', viewsController.getLoginForm);
+router.get('/', authController.isLoggedIn, viewsController.getOverview);
+
+router.get(
+  '/my-tours',
+  bookingController.createBookingCheckout,
+  authController.protect,
+  viewsController.getMyTours,
+);
+router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
+router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 
 module.exports = router;

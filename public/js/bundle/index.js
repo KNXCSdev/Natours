@@ -7131,7 +7131,6 @@ const bookTour = async (tourId)=>{
         const res = await fetch(`/api/v1/bookings/checkout-session/${tourId}`);
         if (!res.ok) throw new Error('Failed to get checkout session');
         const session = await res.json();
-        console.log(session);
         // 2) Create checkout form + charge credit card
         await stripe.redirectToCheckout({
             sessionId: session.session.id
