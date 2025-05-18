@@ -74,7 +74,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   // ADD THE PHOTO TO AN OBJECT IF USER UPLOADED IT
   const filteredBody = filterObj(req.body, 'name', 'email');
-  console.log('Filtered body:', filteredBody);
   if (req.file) filteredBody.photo = req.file.filename;
 
   // 3) Update user document
