@@ -21,14 +21,17 @@
     }
   },
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "start:prod": "set NODE_ENV=production&& nodemon server.js",
     "watch:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundle",
-    "build:js": "parcel watch ./public/js/index.js --dist-dir ./public/js/bundle"
+    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundle",
+    "build": "npm run build:js"
   },
   "dependencies": {
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
+    "compression": "^1.8.0",
     "cookie-parser": "^1.4.7",
     "core-js": "^3.42.0",
     "dotenv": "^16.5.0",
@@ -57,7 +60,7 @@
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
-    "eslint": "^9.25.1",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-import": "^2.31.0",

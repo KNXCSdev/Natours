@@ -159,11 +159,11 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
 
-  next();
-});
+//   next();
+// });
 
 //AGGREGATION MIDDLEWARE IT BASICALLY RUNS BEFORE THE AGGREGATE FUNCTION IN THE TOUR CONTROLLER SO THE FUNCTION DOESNT CALCULATE THE SECRET TOURS NOTE
 // tourSchema.pre('aggregate', function (next) {

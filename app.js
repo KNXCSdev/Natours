@@ -19,6 +19,7 @@ const { default: helmet } = require('helmet');
 const { xss } = require('express-xss-sanitizer');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 /* eslint-disable no-undef */
 
 //1) MIDDLEWARES SECTION
@@ -97,6 +98,8 @@ app.use(
     ],
   }),
 );
+
+app.use(compression());
 
 // TEST MIDDLEWARE
 app.use((req, res, next) => {

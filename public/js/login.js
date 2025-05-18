@@ -16,8 +16,6 @@ export async function login(email, password) {
       throw new Error(data.message || 'Login failed');
     }
 
-    console.log(data); // <- see actual response
-
     if (data.status === 'success') {
       showAlert('success', 'Logged in successfully!');
       window.setTimeout(() => {
