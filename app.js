@@ -20,9 +20,12 @@ const { xss } = require('express-xss-sanitizer');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 /* eslint-disable no-undef */
 
 //1) MIDDLEWARES SECTION
+
+app.use(cors());
 
 app.use(helmet());
 

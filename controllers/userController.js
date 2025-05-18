@@ -32,6 +32,8 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+  console.log('Received file:', req.file);
+
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -60,6 +62,7 @@ exports.getMe = (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
+
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -72,6 +75,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   // ADD THE PHOTO TO AN OBJECT IF USER UPLOADED IT
   const filteredBody = filterObj(req.body, 'name', 'email');
+  console.log('Filtered body:', filteredBody);
   if (req.file) filteredBody.photo = req.file.filename;
 
   // 3) Update user document
