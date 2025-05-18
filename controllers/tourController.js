@@ -57,7 +57,6 @@ exports.resizeTourPhotos = catchAsync(async (req, res, next) => {
 });
 
 exports.aliasTopTours = (req, res, next) => {
-  console.log('MIDDLEWARE RUNNING');
   //COULDNT USE req.query.sort=... BECAUSE EXPRESS QUERY IS IMMUTABLE NOW BUG
   req.url =
     '/?sort=-ratingsAverage,price&fields=ratingsAverage,price,name,difficulty,summary&limit=5';
