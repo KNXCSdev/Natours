@@ -9,7 +9,7 @@ html(lang="en")
       link(rel="shortcut icon" type="img/png" href="/img/favicon.png")
 
       
-  body
+  body(data-alert=`${alert ? alert : ''}`)
     include _header
 
     block content 
