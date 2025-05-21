@@ -9,6 +9,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 
 const app = express();
 
@@ -21,6 +22,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const cors = require('cors');
+
 /* eslint-disable no-undef */
 
 //1) MIDDLEWARES SECTION
@@ -80,6 +82,23 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+//LIMIT REQUEST FROM SAME API
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  message: 'Too many requests from this IP, please try again in an hour',
+});
+
+app.use('/api', limiter);
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+);
+
 //BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
 //limit data to 10kb
 app.use(express.json({ limit: '10kb' }));
@@ -110,17 +129,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
-//LIMIT REQUEST FROM SAME API
-const limiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 60 minutes
-  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-  standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-  message: 'Too many requests from this IP, please try again in an hour',
-});
-
-app.use('/api', limiter);
 
 //3) SECTION ROUTES
 app.use('/', viewRouter);
