@@ -48,6 +48,7 @@ exports.getAll = (Model) =>
     //BASICALLY CHECKS IF THERE IS A TOUR ID IF YES THEN JUST DISPLAY ONLY REVIEWS WITH THE SPECIFIC TOURID
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
