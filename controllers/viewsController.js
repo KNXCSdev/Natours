@@ -73,6 +73,12 @@ exports.getLoginForm = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getSignupForm = catchAsync(async (req, res, next) => {
+  res.status(200).render('signup', {
+    title: 'Sign up',
+  });
+});
+
 //WE DONT NEED TO PASS THE USER INTO THE RENDER FUNCTION BECAUSE WE ARE USING RES.LOCALS AND THAT WILL BE PASSED TO THE TEMPLATE
 exports.getAccount = catchAsync(async (req, res, next) => {
   res.status(200).render('account', {
