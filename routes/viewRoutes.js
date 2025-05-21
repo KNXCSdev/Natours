@@ -1,12 +1,10 @@
 const express = require('express');
 const viewsController = require('../controllers/viewsController');
 const authController = require('../controllers/authController');
-const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
+router.use(viewsController.alerts);
 
-//CALLING THIS IS FOR ROUTES THAT CAN ONLY BE ACCESSED IF LOGGED IN
-//IF NOT LOGGED IN, IT WILL REDIRECT TO LOGIN PAGE
 router.get('/me', authController.protect, viewsController.getAccount);
 router.post(
   '/submit-user-data',
