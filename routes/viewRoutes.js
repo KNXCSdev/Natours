@@ -14,11 +14,13 @@ router.post(
 
 //CALLING isLOGGEDIN  IS FOR ROUTES THAT CAN BE ACCESSED WITHOUT LOGGING IN
 //SO BASICALLY THIS WILL CHECK IF THE PAGE NEEDS TO RENDER THE USER PHOTO IF IS LOGGED IN
+//CALLING IT ALSO IN TOUR BEACUSE IT HAS THE HEADER WITH USER PHOTO
 
 router.get('/', authController.isLoggedIn, viewsController.getOverview);
-
 router.get('/my-tours', authController.protect, viewsController.getMyTours);
 router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
-router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
+
+router.get('/signup', viewsController.getSignupForm);
+router.get('/login', viewsController.getLoginForm);
 
 module.exports = router;
