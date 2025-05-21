@@ -19,12 +19,7 @@ router.post(
 
 router.get('/', authController.isLoggedIn, viewsController.getOverview);
 
-router.get(
-  '/my-tours',
-  bookingController.createBookingCheckout,
-  authController.protect,
-  viewsController.getMyTours,
-);
+router.get('/my-tours', authController.protect, viewsController.getMyTours);
 router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 
